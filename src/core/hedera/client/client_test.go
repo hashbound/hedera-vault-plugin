@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/hashgraph/hedera-sdk-go/v2"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,12 +13,12 @@ func TestClientFromConfig(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unable to create client: %s", err)
 	}
-	
+
 	fmt.Printf("client: %v", client.GetLedgerID())
 }
 
 func TestClientTestNet(t *testing.T) {
-	client, err := ClientFromNetworkName(NETWORK_TESTNET)
+	client, err := ClientFromNetworkName(string(hedera.NetworkNameTestnet))
 	if err != nil {
 		t.Fatalf("unable to create client: %s", err)
 	}
@@ -27,7 +28,7 @@ func TestClientTestNet(t *testing.T) {
 }
 
 func TestClientMainNet(t *testing.T) {
-	client, err := ClientFromNetworkName(NETWORK_MAINNET)
+	client, err := ClientFromNetworkName(string(hedera.NetworkNameMainnet))
 	if err != nil {
 		t.Fatalf("unable to create client: %s", err)
 	}
