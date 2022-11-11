@@ -32,7 +32,7 @@ type CreateFungibleToken struct {
 	Memo             string
 }
 
-func (t *Token) CreateFT(tokenCreation *CreateFungibleTokenDTO) (*hedera.TokenID, error) {
+func (t *Token) CreateFT(tokenCreation *CreateFungibleTokenDTO) (*Token, error) {
 	tokenParams, err := tokenCreation.validate()
 	if err != nil {
 		return nil, fmt.Errorf("invalid token creation params: %s", err)
@@ -112,7 +112,5 @@ func (t *Token) CreateFT(tokenCreation *CreateFungibleTokenDTO) (*hedera.TokenID
 		return nil, fmt.Errorf("get transaction receipt failed: %s", err)
 	}
 
-	tokenID := receipt.TokenID
-
-	return tokenID, nil
+	return t.WithTokenID(*receipt.TokenID), nil
 }
