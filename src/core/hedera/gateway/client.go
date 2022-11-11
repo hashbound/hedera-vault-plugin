@@ -1,4 +1,4 @@
-package client
+package gateway
 
 import (
 	"fmt"
@@ -6,17 +6,7 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-type Client struct {
-	client      *hedera.Client
-	operatorID  string
-	operatorKey string
-}
-
-func New() *Client {
-	return &Client{}
-}
-
-func (c *Client) ClientFromConfig(cfg *ClientConfig) (*Client, error) {
+func (gw *Gateway) ClientFromConfig(cfg *ClientConfig) (*Gateway, error) {
 	accountID, err := hedera.AccountIDFromString(cfg.NetworkNodeAccountID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid network account id: %s", err)
@@ -24,31 +14,35 @@ func (c *Client) ClientFromConfig(cfg *ClientConfig) (*Client, error) {
 
 	node := make(map[string]hedera.AccountID, 1)
 	node[cfg.NetworkNodeAddress] = accountID
-	c.client = hedera.ClientForNetwork(node)
+	gw.client = hedera.ClientForNetwork(node)
 
-	if c.operatorID != "" && c.operatorKey != "" {
-		c, err = c.SetOperator()
+	if gw.operator.operatorID != "" && gw.operator.operatorKey != "" {
+		gw, err = gw.SetOperator()
 		if err != nil {
 			return nil, fmt.Errorf("unable to set operator: %s", err)
 		}
 	}
 
-	return c, nil
+	return gw, nil
 }
 
-func (c *Client) ClientFromNetworkName(network string) (*Client, error) {
+func (gw *Gateway) ClientFromNetworkName(network string) (*Gateway, error) {
 	client, err := hedera.ClientForName(network)
 	if err != nil {
 		return nil, fmt.Errorf("unable to prepare client: %s", err)
 	}
-	c.client = client
+	gw.client = client
 
-	if c.operatorID != "" && c.operatorKey != "" {
-		c, err = c.SetOperator()
+	if gw.operator.operatorID != "" && gw.operator.operatorKey != "" {
+		gw, err = gw.SetOperator()
 		if err != nil {
 			return nil, fmt.Errorf("unable to set operator: %s", err)
 		}
 	}
 
-	return c, nil
+	return gw, nil
+}
+
+func (gw *Gateway) GetClient() *hedera.Client {
+	return gw.client
 }

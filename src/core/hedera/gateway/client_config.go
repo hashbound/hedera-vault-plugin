@@ -1,4 +1,4 @@
-package client
+package gateway
 
 type ClientConfig struct {
 	NetworkNodeAddress   string
