@@ -16,13 +16,6 @@ func (gw *Gateway) ClientFromConfig(cfg *ClientConfig) (*Gateway, error) {
 	node[cfg.NetworkNodeAddress] = accountID
 	gw.client = hedera.ClientForNetwork(node)
 
-	if gw.operator.operatorID != "" && gw.operator.operatorKey != "" {
-		gw, err = gw.SetOperator()
-		if err != nil {
-			return nil, fmt.Errorf("unable to set operator: %s", err)
-		}
-	}
-
 	return gw, nil
 }
 
@@ -33,16 +26,5 @@ func (gw *Gateway) ClientFromNetworkName(network string) (*Gateway, error) {
 	}
 	gw.client = client
 
-	if gw.operator.operatorID != "" && gw.operator.operatorKey != "" {
-		gw, err = gw.SetOperator()
-		if err != nil {
-			return nil, fmt.Errorf("unable to set operator: %s", err)
-		}
-	}
-
 	return gw, nil
-}
-
-func (gw *Gateway) GetClient() *hedera.Client {
-	return gw.client
 }
