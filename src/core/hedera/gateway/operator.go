@@ -7,37 +7,20 @@ import (
 )
 
 type Operator struct {
-	operatorID  string
-	operatorKey string
+	operatorID  hedera.AccountID
+	operatorKey hedera.PrivateKey
 }
 
-func NewOperator(operatorID, operatorKey string) *Operator {
-	return &Operator{operatorID, operatorKey}
-}
-
-func (gw *Gateway) WithOperator(operatorID, operatorKey string) *Gateway {
-	gw.operator.operatorID = operatorID
-	gw.operator.operatorKey = operatorKey
-
-	return gw
-}
-
-func (gw *Gateway) SetOperator() (*Gateway, error) {
-	operatorID, err := hedera.AccountIDFromString(gw.operator.operatorID)
+func NewOperator(accountID, privateKey string) (*Operator, error) {
+	operatorID, err := hedera.AccountIDFromString(accountID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid operatorID: %s", err)
 	}
 
-	operatorKey, err := hedera.PrivateKeyFromString(gw.operator.operatorKey)
+	operatorKey, err := hedera.PrivateKeyFromString(privateKey)
 	if err != nil {
 		return nil, fmt.Errorf("invalid operator key: %s", err)
 	}
 
-	gw.client = gw.client.SetOperator(operatorID, operatorKey)
-
-	return gw, nil
-}
-
-func (gw *Gateway) SetWithOperator(operatorID, operatorKey string) (*Gateway, error) {
-	return gw.WithOperator(operatorID, operatorKey).SetOperator()
+	return &Operator{operatorID, operatorKey}, nil
 }
