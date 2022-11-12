@@ -6,28 +6,28 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-func (t *Token) DissociateWithToken(accountIDString, accountKeyString string) (*hedera.Status, error) {
-	accountID, err := hedera.AccountIDFromString(accountIDString)
-	if err != nil {
-		return nil, fmt.Errorf("invalid accountID")
-	}
+type DissociateWithTokenParams struct {
+	accountID  hedera.AccountID
+	accountKey hedera.PrivateKey
+}
 
-	accountKey, err := hedera.PrivateKeyFromString(accountKeyString)
+func (t *Token) DissociateWithToken(dissociateTokenDTO *DissociateTokenDTO) (*hedera.Status, error) {
+	dissociateTokenParams, err := dissociateTokenDTO.validate()
 	if err != nil {
-		return nil, fmt.Errorf("invalid supply key: %s", err)
+		return nil, fmt.Errorf("invalid dissociate token params: %s", err)
 	}
 
 	transaction, err := hedera.
 		NewTokenDissociateTransaction().
 		SetTokenIDs(t.TokenID).
-		SetAccountID(accountID).
+		SetAccountID(dissociateTokenParams.accountID).
 		FreezeWith(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("prepare transaction failed: %s", err)
 	}
 
 	response, err := transaction.
-		Sign(accountKey).
+		Sign(dissociateTokenParams.accountKey).
 		Execute(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("execute transaction failed: %s", err)

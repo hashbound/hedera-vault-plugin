@@ -6,28 +6,28 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-func (t *Token) AssociateWithToken(accountIDString, accountKeyString string) (*hedera.Status, error) {
-	accountID, err := hedera.AccountIDFromString(accountIDString)
-	if err != nil {
-		return nil, fmt.Errorf("invalid accountID")
-	}
+type AssociateWithTokenParams struct {
+	accountID  hedera.AccountID
+	accountKey hedera.PrivateKey
+}
 
-	accountKey, err := hedera.PrivateKeyFromString(accountKeyString)
+func (t *Token) AssociateWithToken(associateTokenDTO *AssociateTokenDTO) (*hedera.Status, error) {
+	associateTokenParams, err := associateTokenDTO.validate()
 	if err != nil {
-		return nil, fmt.Errorf("invalid supply key: %s", err)
+		return nil, fmt.Errorf("invalid associate token params: %s", err)
 	}
 
 	transaction, err := hedera.
 		NewTokenAssociateTransaction().
 		SetTokenIDs(t.TokenID).
-		SetAccountID(accountID).
+		SetAccountID(associateTokenParams.accountID).
 		FreezeWith(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("prepare transaction failed: %s", err)
 	}
 
 	response, err := transaction.
-		Sign(accountKey).
+		Sign(associateTokenParams.accountKey).
 		Execute(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("execute transaction failed: %s", err)
