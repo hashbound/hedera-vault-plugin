@@ -6,28 +6,28 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-func (t *Token) UnfreezeAccount(accountIDString, kycKeyString string) (*hedera.Status, error) {
-	accountID, err := hedera.AccountIDFromString(accountIDString)
-	if err != nil {
-		return nil, fmt.Errorf("invalid accountID")
-	}
+type UnfreezeAccountParams struct {
+	accountID hedera.AccountID
+	kycKey    hedera.PrivateKey
+}
 
-	kycKey, err := hedera.PrivateKeyFromString(kycKeyString)
+func (t *Token) UnfreezeAccount(unfreezeTokenDTO *UnfreezeAccountDTO) (*hedera.Status, error) {
+	unfreezeTokenParams, err := unfreezeTokenDTO.validate()
 	if err != nil {
-		return nil, fmt.Errorf("invalid supply key: %s", err)
+		return nil, fmt.Errorf("invalid unfreeze token parameters: %s", err)
 	}
 
 	transaction, err := hedera.
 		NewTokenUnfreezeTransaction().
 		SetTokenID(t.TokenID).
-		SetAccountID(accountID).
+		SetAccountID(unfreezeTokenParams.accountID).
 		FreezeWith(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("prepare transaction failed: %s", err)
 	}
 
 	response, err := transaction.
-		Sign(kycKey).
+		Sign(unfreezeTokenParams.kycKey).
 		Execute(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("execute transaction failed: %s", err)
