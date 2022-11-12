@@ -6,23 +6,28 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-func (t *Token) MintToken(amount uint64, supplyKeyString string) (*hedera.Status, error) {
-	supplyKey, err := hedera.PrivateKeyFromString(supplyKeyString)
+type MintTokenParams struct {
+	amount    uint64
+	supplyKey *hedera.PrivateKey
+}
+
+func (t *Token) MintToken(mintTokenDTO *MintTokenDTO) (*hedera.Status, error) {
+	mintTokenParams, err := mintTokenDTO.validate()
 	if err != nil {
-		return nil, fmt.Errorf("invalid supply key: %s", err)
+		return nil, fmt.Errorf("invalid Mint Token Parameters: %s", err)
 	}
 
 	transaction, err := hedera.
 		NewTokenMintTransaction().
 		SetTokenID(t.TokenID).
-		SetAmount(amount).
+		SetAmount(mintTokenParams.amount).
 		FreezeWith(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("prepare transaction failed: %s", err)
 	}
 
 	response, err := transaction.
-		Sign(supplyKey).
+		Sign(*mintTokenParams.supplyKey).
 		Execute(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("execute transaction failed: %s", err)
