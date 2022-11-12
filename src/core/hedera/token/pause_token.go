@@ -6,10 +6,14 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-func (t *Token) PauseToken(puaseKeyString string) (*hedera.Status, error) {
-	pauseKey, err := hedera.PrivateKeyFromString(puaseKeyString)
+type PauseTokenParams struct {
+	pauseKey hedera.PrivateKey
+}
+
+func (t *Token) PauseToken(pauseTokenDTO *PauseTokenDTO) (*hedera.Status, error) {
+	pauseTokenParams, err := pauseTokenDTO.validate()
 	if err != nil {
-		return nil, fmt.Errorf("invalid supply key: %s", err)
+		return nil, fmt.Errorf("invalid pause token parameters: %s", err)
 	}
 
 	transaction, err := hedera.
@@ -21,7 +25,7 @@ func (t *Token) PauseToken(puaseKeyString string) (*hedera.Status, error) {
 	}
 
 	response, err := transaction.
-		Sign(pauseKey).
+		Sign(pauseTokenParams.pauseKey).
 		Execute(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("execute transaction failed: %s", err)
