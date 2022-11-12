@@ -6,31 +6,29 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-func (t *Token) TransferToken(senderIDString, senderKeyString, recipientIDString string, amount uint64) (*hedera.Status, error) {
-	senderID, err := hedera.AccountIDFromString(senderIDString)
-	if err != nil {
-		return nil, fmt.Errorf("invalid senderID: %s", err)
-	}
-	senderKey, err := hedera.PrivateKeyFromString(senderKeyString)
-	if err != nil {
-		return nil, fmt.Errorf("invalif senderKey: %s", err)
-	}
+type TransferTokenParams struct {
+	amount     uint64
+	senderID   hedera.AccountID
+	receiverID hedera.AccountID
+	senderKey  hedera.PrivateKey
+}
 
-	recipientID, err := hedera.AccountIDFromString(recipientIDString)
+func (t *Token) TransferToken(trnasferTokenDTO *TransferTokenDTO) (*hedera.Status, error) {
+	transferTokenParams, err := trnasferTokenDTO.validate()
 	if err != nil {
-		return nil, fmt.Errorf("invalid recipientID: %s", err)
+		return nil, fmt.Errorf("invalid transfer token parameters: %s", err)
 	}
 
 	transaction, err := hedera.NewTransferTransaction().
-		AddTokenTransfer(t.TokenID, senderID, int64(amount)*-1).
-		AddTokenTransfer(t.TokenID, recipientID, int64(amount)).
+		AddTokenTransfer(t.TokenID, transferTokenParams.senderID, int64(-transferTokenParams.amount)).
+		AddTokenTransfer(t.TokenID, transferTokenParams.receiverID, int64(transferTokenParams.amount)).
 		FreezeWith(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("prepare transaction failed: %s", err)
 	}
 
 	response, err := transaction.
-		Sign(senderKey).
+		Sign(transferTokenParams.senderKey).
 		Execute(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("execute transaction failed: %s", err)
