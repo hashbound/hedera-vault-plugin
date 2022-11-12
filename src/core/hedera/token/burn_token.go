@@ -6,23 +6,28 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-func (t *Token) BurnToken(amount uint64, supplyKeyString string) (*hedera.Status, error) {
-	supplyKey, err := hedera.PrivateKeyFromString(supplyKeyString)
+type BurnTokenParams struct {
+	amount    uint64
+	supplyKey *hedera.PrivateKey
+}
+
+func (t *Token) BurnToken(burnTokenDTO *BurnTokenDTO) (*hedera.Status, error) {
+	burnTokenParams, err := burnTokenDTO.validate()
 	if err != nil {
-		return nil, fmt.Errorf("invalid supply key: %s", err)
+		return nil, fmt.Errorf("invalid burn Token Parameters: %s", err)
 	}
 
 	transaction, err := hedera.
 		NewTokenBurnTransaction().
 		SetTokenID(t.TokenID).
-		SetAmount(amount).
+		SetAmount(burnTokenParams.amount).
 		FreezeWith(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("prepare transaction failed: %s", err)
 	}
 
 	response, err := transaction.
-		Sign(supplyKey).
+		Sign(*burnTokenParams.supplyKey).
 		Execute(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("execute transaction failed: %s", err)
