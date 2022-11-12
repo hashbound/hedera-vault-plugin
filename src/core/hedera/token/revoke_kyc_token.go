@@ -6,28 +6,28 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-func (t *Token) RevokeKyc(accountIDString, kycKeyString string) (*hedera.Status, error) {
-	accountID, err := hedera.AccountIDFromString(accountIDString)
-	if err != nil {
-		return nil, fmt.Errorf("invalid accountID")
-	}
+type RevokeKycParams struct {
+	accountID hedera.AccountID
+	kycKey    hedera.PrivateKey
+}
 
-	kycKey, err := hedera.PrivateKeyFromString(kycKeyString)
+func (t *Token) RevokeKyc(revokeKycDTO *RevokeKycDTO) (*hedera.Status, error) {
+	revokeKycParams, err := revokeKycDTO.validate()
 	if err != nil {
-		return nil, fmt.Errorf("invalid supply key: %s", err)
+		return nil, fmt.Errorf("invalid revoke KYC parameters: %s", err)
 	}
 
 	transaction, err := hedera.
 		NewTokenRevokeKycTransaction().
 		SetTokenID(t.TokenID).
-		SetAccountID(accountID).
+		SetAccountID(revokeKycParams.accountID).
 		FreezeWith(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("prepare transaction failed: %s", err)
 	}
 
 	response, err := transaction.
-		Sign(kycKey).
+		Sign(revokeKycParams.kycKey).
 		Execute(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("execute transaction failed: %s", err)

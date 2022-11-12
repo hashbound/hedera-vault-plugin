@@ -6,28 +6,28 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-func (t *Token) GrantKyc(accountIDString, kycKeyString string) (*hedera.Status, error) {
-	accountID, err := hedera.AccountIDFromString(accountIDString)
-	if err != nil {
-		return nil, fmt.Errorf("invalid accountID")
-	}
+type GrantKycParams struct {
+	accountID hedera.AccountID
+	kycKey    hedera.PrivateKey
+}
 
-	kycKey, err := hedera.PrivateKeyFromString(kycKeyString)
+func (t *Token) GrantKyc(grantKycDTO *GrantKycDTO) (*hedera.Status, error) {
+	grantKycParams, err := grantKycDTO.validate()
 	if err != nil {
-		return nil, fmt.Errorf("invalid supply key: %s", err)
+		return nil, fmt.Errorf("invalid grant KYC parameters: %s", err)
 	}
 
 	transaction, err := hedera.
 		NewTokenGrantKycTransaction().
 		SetTokenID(t.TokenID).
-		SetAccountID(accountID).
+		SetAccountID(grantKycParams.accountID).
 		FreezeWith(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("prepare transaction failed: %s", err)
 	}
 
 	response, err := transaction.
-		Sign(kycKey).
+		Sign(grantKycParams.kycKey).
 		Execute(t.gateway.GetClient())
 	if err != nil {
 		return nil, fmt.Errorf("execute transaction failed: %s", err)
