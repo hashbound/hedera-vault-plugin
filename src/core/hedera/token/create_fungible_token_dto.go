@@ -4,17 +4,18 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/hashbound/hedera-vault-plugin/src/core/key"
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
 type CreateFungibleTokenDTO struct {
-	Type               string         `json:"type"`
-	Name               string         `json:"name"`
-	Symbol             string         `json:"symbol"`
-	Decimals           uint           `json:"decimal"`
-	InitSupply         uint64         `json:"initSupply"`
-	TreasuryAccountID  string         `json:"treasuryAccountID"`
+	Type               string         `json:"type" validate:"required,oneof=TOKEN_TYPE_FUNGIBLE_COMMON TOKEN_TYPE_NON_FUNGIBLE_UNIQUE"`
+	Name               string         `json:"name" validate:"required,min=1,max=100"`
+	Symbol             string         `json:"symbol" validate:"required,min=1,max=100"`
+	Decimals           uint           `json:"decimal" validate:"min=0"`
+	InitSupply         uint64         `json:"initSupply" validate:"min=0"`
+	TreasuryAccountID  string         `json:"treasuryAccountID" validate:"required"`
 	TreasuryPrivateKey string         `json:"treasuryPrivateKey"`
 	AdminPrivateKey    key.PrivateKey `json:"adminPrivateKey"`
 	KycKey             string         `json:"kycKey"`
@@ -24,8 +25,8 @@ type CreateFungibleTokenDTO struct {
 	FeeScheduleKey     string         `json:"feeScheduleKey"`
 	PauseKey           string         `json:"pauseKey"`
 	// CustomFees         []string       `json:"customFees"`
-	MaxSupply        int64     `json:"maxSupply"`
-	SupplyType       string    `json:"supplyType"`
+	MaxSupply        int64     `json:"maxSupply" validate:"min=0"`
+	SupplyType       string    `json:"supplyType" validate:"oneof=TOKEN_SUPPLY_TYPE_INFINITE TOKEN_SUPPLY_TYPE_FINITE"`
 	FreezeDefault    bool      `json:"freezeDefault"`
 	ExpirationTime   time.Time `json:"expirationTime"`
 	AutoRenewAccount string    `json:"autoRenewAccount"`
@@ -33,26 +34,21 @@ type CreateFungibleTokenDTO struct {
 }
 
 func (tokenCreation *CreateFungibleTokenDTO) validate() (*CreateFungibleToken, error) {
+	validate := validator.New()
+	err := validate.Struct(tokenCreation)
+	if err != nil {
+		return nil, fmt.Errorf("invalid token creation parameters: %s", err)
+	}
+
 	t := &CreateFungibleToken{}
 
 	if tokenCreation.Type == hedera.TokenTypeFungibleCommon.String() {
 		t.Type = hedera.TokenTypeFungibleCommon
 	} else if tokenCreation.Type == hedera.TokenTypeNonFungibleUnique.String() {
 		t.Type = hedera.TokenTypeNonFungibleUnique
-	} else {
-		return nil, fmt.Errorf("invalid token type")
-	}
-
-	if len(tokenCreation.Name) == 0 || len(tokenCreation.Name) > 100 {
-		return nil, fmt.Errorf("invalid token Name")
 	}
 	t.Name = tokenCreation.Name
-
-	if len(tokenCreation.Symbol) == 0 || len(tokenCreation.Symbol) > 100 {
-		return nil, fmt.Errorf("invalid token Symbol")
-	}
 	t.Symbol = tokenCreation.Symbol
-
 	t.Decimals = tokenCreation.Decimals
 
 	if tokenCreation.Type == hedera.TokenTypeNonFungibleUnique.String() && tokenCreation.Decimals > 0 {
@@ -142,11 +138,9 @@ func (tokenCreation *CreateFungibleTokenDTO) validate() (*CreateFungibleToken, e
 		t.MaxSupply = tokenCreation.MaxSupply
 	} else if tokenCreation.SupplyType == hedera.TokenSupplyTypeInfinite.String() {
 		if tokenCreation.MaxSupply > 0 {
-			return nil, fmt.Errorf("invalid supply type with max supply")
+			return nil, fmt.Errorf("invalid max supply with supply type")
 		}
 		t.SupplyType = hedera.TokenSupplyTypeInfinite
-	} else {
-		return nil, fmt.Errorf("invalid token supply type")
 	}
 
 	t.FreezeDefault = tokenCreation.FreezeDefault
