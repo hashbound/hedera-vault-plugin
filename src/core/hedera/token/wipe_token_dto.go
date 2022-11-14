@@ -3,18 +3,21 @@ package token
 import (
 	"fmt"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
 type WipeTokenDTO struct {
-	amount    uint64
-	accountID string
-	wipeKey   string
+	amount    uint64	`validate:"required,gt=0"`
+	accountID string	`validate:"required"`
+	wipeKey   string	`validate:"required"`
 }
 
 func (wipeTokenDTO *WipeTokenDTO) validate() (*WipeTokenParams, error) {
-	if wipeTokenDTO.amount == 0 {
-		return nil, fmt.Errorf("invalid wipe amount value")
+	validate := validator.New()
+	err := validate.Struct(wipeTokenDTO)
+	if err != nil {
+		return nil, fmt.Errorf("invalid wipe token parameters")
 	}
 
 	accountID, err := hedera.AccountIDFromString(wipeTokenDTO.accountID)

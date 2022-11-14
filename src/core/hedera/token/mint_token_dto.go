@@ -3,17 +3,20 @@ package token
 import (
 	"fmt"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
 type MintTokenDTO struct {
-	amount    uint64
-	supplyKey string
+	amount    uint64	`validate:"required,gt=0"`
+	supplyKey string	`validate:"required"`
 }
 
 func (mintTokenDTO *MintTokenDTO) validate() (*MintTokenParams, error) {
-	if mintTokenDTO.amount == 0 {
-		return nil, fmt.Errorf("invalid amount value")
+	validate := validator.New()
+	err := validate.Struct(mintTokenDTO)
+	if err != nil {
+		return nil, fmt.Errorf("invalid mint token parameters")
 	}
 
 	supplyKey, err := hedera.PrivateKeyFromString(mintTokenDTO.supplyKey)

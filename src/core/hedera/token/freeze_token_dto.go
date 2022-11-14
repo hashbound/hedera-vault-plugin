@@ -3,15 +3,22 @@ package token
 import (
 	"fmt"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
 type FreezeAccountDTO struct {
-	accountID string
-	kycKey    string
+	accountID string	`validate:"required"`
+	kycKey    string	`validate:"required"`
 }
 
 func (freezeAccountDTO *FreezeAccountDTO) validate() (*FreezeAccountParams, error) {
+	validate := validator.New()
+	err := validate.Struct(freezeAccountDTO)
+	if err != nil {
+		return nil, fmt.Errorf("invalid freeze token parameters")
+	}
+	
 	accountID, err := hedera.AccountIDFromString(freezeAccountDTO.accountID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid accountID")

@@ -3,19 +3,22 @@ package token
 import (
 	"fmt"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
 type TransferTokenDTO struct {
-	amount     uint64
-	senderID   string
-	receiverID string
-	senderKey  string
+	amount     uint64	`validate:"required,gt=0"`
+	senderID   string	`validate:"required"`
+	receiverID string	`validate:"required"`
+	senderKey  string	`validate:"required"`
 }
 
 func (transferTokenDTO *TransferTokenDTO) validate() (*TransferTokenParams, error) {
-	if transferTokenDTO.amount == 0 {
-		return nil, fmt.Errorf("invalid transfer amount")
+	validate := validator.New()
+	err := validate.Struct(transferTokenDTO)
+	if err != nil {
+		return nil, fmt.Errorf("invalid transfer token parameters")
 	}
 
 	senderID, err := hedera.AccountIDFromString(transferTokenDTO.senderID)
