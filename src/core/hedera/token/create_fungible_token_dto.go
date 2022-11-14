@@ -18,19 +18,19 @@ type CreateFungibleTokenDTO struct {
 	TreasuryAccountID  string         `json:"treasuryAccountID" validate:"required"`
 	TreasuryPrivateKey string         `json:"treasuryPrivateKey"`
 	AdminPrivateKey    key.PrivateKey `json:"adminPrivateKey"`
-	KycKey             string         `json:"kycKey"`
-	FreezeKey          string         `json:"freezeKey"`
-	WipeKey            string         `json:"wipeKey"`
-	SupplyKey          string         `json:"supplyKey"`
-	FeeScheduleKey     string         `json:"feeScheduleKey"`
-	PauseKey           string         `json:"pauseKey"`
+	KycKey             key.PublicKey  `json:"kycKey"`
+	FreezeKey          key.PublicKey  `json:"freezeKey"`
+	WipeKey            key.PublicKey  `json:"wipeKey"`
+	SupplyKey          key.PublicKey  `json:"supplyKey"`
+	FeeScheduleKey     key.PublicKey  `json:"feeScheduleKey"`
+	PauseKey           key.PublicKey  `json:"pauseKey"`
+	AutoRenewAccount   key.PublicKey  `json:"autoRenewAccount"`
 	// CustomFees         []string       `json:"customFees"`
-	MaxSupply        int64     `json:"maxSupply" validate:"min=0"`
-	SupplyType       string    `json:"supplyType" validate:"oneof=TOKEN_SUPPLY_TYPE_INFINITE TOKEN_SUPPLY_TYPE_FINITE"`
-	FreezeDefault    bool      `json:"freezeDefault"`
-	ExpirationTime   time.Time `json:"expirationTime"`
-	AutoRenewAccount string    `json:"autoRenewAccount"`
-	Memo             string    `json:"memo"`
+	MaxSupply      int64     `json:"maxSupply" validate:"min=0"`
+	SupplyType     string    `json:"supplyType" validate:"oneof=TOKEN_SUPPLY_TYPE_INFINITE TOKEN_SUPPLY_TYPE_FINITE"`
+	FreezeDefault  bool      `json:"freezeDefault"`
+	ExpirationTime time.Time `json:"expirationTime"`
+	Memo           string    `json:"memo"`
 }
 
 func (tokenCreation *CreateFungibleTokenDTO) validate() (*CreateFungibleToken, error) {
@@ -77,55 +77,55 @@ func (tokenCreation *CreateFungibleTokenDTO) validate() (*CreateFungibleToken, e
 		t.AdminPublicKey = adminKey.PublicKey
 	}
 
-	if tokenCreation.KycKey != "" {
-		kycKey, err := hedera.PublicKeyFromString(tokenCreation.KycKey)
+	if tokenCreation.KycKey != (key.PublicKey{}) {
+		kycKey, err := key.FromPublicKey(tokenCreation.KycKey)
 		if err != nil {
 			return nil, fmt.Errorf("invalid Admin Public Key: %s", err)
 		}
-		t.KycKey = kycKey
+		t.KycKey = kycKey.PublicKey
 	}
 
-	if tokenCreation.FreezeKey != "" {
-		freezeKey, err := hedera.PublicKeyFromString(tokenCreation.FreezeKey)
+	if tokenCreation.FreezeKey != (key.PublicKey{}) {
+		freezeKey, err := key.FromPublicKey(tokenCreation.FreezeKey)
 		if err != nil {
 			return nil, fmt.Errorf("invalid Admin Public Key: %s", err)
 		}
-		t.FreezeKey = freezeKey
+		t.FreezeKey = freezeKey.PublicKey
 	}
 
-	if tokenCreation.SupplyKey != "" {
-		supplyKey, err := hedera.PublicKeyFromString(tokenCreation.SupplyKey)
+	if tokenCreation.SupplyKey != (key.PublicKey{}) {
+		supplyKey, err := key.FromPublicKey(tokenCreation.SupplyKey)
 		if err != nil {
 			return nil, fmt.Errorf("invalid Admin Public Key: %s", err)
 		}
-		t.SupplyKey = supplyKey
+		t.SupplyKey = supplyKey.PublicKey
 	}
 
-	if tokenCreation.FeeScheduleKey != "" {
-		feeScheduleKey, err := hedera.PublicKeyFromString(tokenCreation.FeeScheduleKey)
+	if tokenCreation.FeeScheduleKey != (key.PublicKey{}) {
+		feeScheduleKey, err := key.FromPublicKey(tokenCreation.FeeScheduleKey)
 		if err != nil {
 			return nil, fmt.Errorf("invalid Admin Public Key: %s", err)
 		}
-		t.FeeScheduleKey = feeScheduleKey
+		t.FeeScheduleKey = feeScheduleKey.PublicKey
 	}
 
-	if tokenCreation.PauseKey != "" {
-		pauseKey, err := hedera.PublicKeyFromString(tokenCreation.PauseKey)
+	if tokenCreation.PauseKey != (key.PublicKey{}) {
+		pauseKey, err := key.FromPublicKey(tokenCreation.PauseKey)
 		if err != nil {
 			return nil, fmt.Errorf("invalid Admin Public Key: %s", err)
 		}
-		t.PauseKey = pauseKey
+		t.PauseKey = pauseKey.PublicKey
 	}
 
-	if tokenCreation.WipeKey != "" {
-		wipeKey, err := hedera.PublicKeyFromString(tokenCreation.WipeKey)
+	if tokenCreation.WipeKey != (key.PublicKey{}) {
+		wipeKey, err := key.FromPublicKey(tokenCreation.WipeKey)
 		if err != nil {
 			return nil, fmt.Errorf("invalid Admin Public Key: %s", err)
 		}
-		t.WipeKey = wipeKey
+		t.WipeKey = wipeKey.PublicKey
 	}
 
-	if tokenCreation.AutoRenewAccount != "" {
+	if tokenCreation.AutoRenewAccount != (key.PublicKey{}) {
 		autoRenewalID, err := hedera.AccountIDFromString(tokenCreation.TreasuryAccountID)
 		if err != nil {
 			return nil, fmt.Errorf("invalid AutoRenewal accountID: %s", err)
