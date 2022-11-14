@@ -34,7 +34,11 @@ func TestFromPrivateKeyED25519(t *testing.T) {
 	publicKey := "302a300506032b657003210027a0ab3727c10325d2ef39ca9f131814b0be4cf2037071b53eb7fd8afd164b3f"
 	algo := ALGORITHM_ED25519
 
-	key, err := FromPrivateKey(privateKey, algo, "")
+	key, err := FromPrivateKey(PrivateKey{
+		Key: privateKey,
+		Algorithm: algo,
+		Curve: "",
+	})
 	if err != nil {
 		t.Fatalf("Unable to derive key pair from string private key: %s\n", err)
 	}
@@ -50,7 +54,11 @@ func TestFromPrivateKeyECDSA(t *testing.T) {
 	algo := ALGORITHM_ECDSA
 	curve := CURVE_SECP256K1
 
-	key, err := FromPrivateKey(privateKey, algo, curve)
+	key, err := FromPrivateKey(PrivateKey{
+		Key: privateKey,
+		Algorithm: algo,
+		Curve: curve,
+	})
 	if err != nil {
 		t.Fatalf("Unable to derive key pair from string private key: %s\n", err)
 	}

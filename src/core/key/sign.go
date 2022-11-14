@@ -5,7 +5,11 @@ import (
 )
 
 func Sign(privateKey, algo, curve string, message []byte) ([]byte, error) {
-	key, err := FromPrivateKey(privateKey, algo, curve)
+	key, err := FromPrivateKey(PrivateKey{
+		Key: privateKey,
+		Algorithm: algo,
+		Curve: curve,
+	})
 	if err != nil {
 		return nil, fmt.Errorf("invalid key or parameters: %s", err)
 	}
