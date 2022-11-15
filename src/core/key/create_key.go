@@ -6,32 +6,26 @@ import (
 	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
-const (
-	ALGORITHM_ED25519 = "ED25519"
-	ALGORITHM_ECDSA   = "ECDSA"
-	CURVE_SECP256K1   = "secp256k1"
-)
-
 type PrivateKey struct {
 	Key       string
-	Algorithm string
-	Curve     string
+	Algorithm Algorithm
+	Curve     Curve
 }
 
 type PublicKey struct {
 	Key       string
-	Algorithm string
-	Curve     string
+	Algorithm Algorithm
+	Curve     Curve
 }
 
 type KeyPair struct {
 	PublicKey  hedera.PublicKey
 	PrivateKey hedera.PrivateKey
-	Algorithm  string
-	Curve      string
+	Algorithm  Algorithm
+	Curve      Curve
 }
 
-func NewKeyPair(pub hedera.PublicKey, priv hedera.PrivateKey, algo, curve string) *KeyPair {
+func NewKeyPair(pub hedera.PublicKey, priv hedera.PrivateKey, algo Algorithm, curve Curve) *KeyPair {
 	return &KeyPair{
 		PublicKey:  pub,
 		PrivateKey: priv,
@@ -40,13 +34,13 @@ func NewKeyPair(pub hedera.PublicKey, priv hedera.PrivateKey, algo, curve string
 	}
 }
 
-func GenerateKeyPair(algo, curve string) (*KeyPair, error) {
+func GenerateKeyPair(algo Algorithm, curve Curve) (*KeyPair, error) {
 	var priv hedera.PrivateKey
 	var err error
 
-	if algo == ALGORITHM_ED25519 {
+	if algo == ED25519 {
 		priv, err = hedera.PrivateKeyGenerateEd25519()
-	} else if algo == ALGORITHM_ECDSA && curve == CURVE_SECP256K1 {
+	} else if algo == ECDSA && curve == secp256k1 {
 		priv, err = hedera.PrivateKeyGenerateEcdsa()
 	} else {
 		return &KeyPair{}, fmt.Errorf("invalid algorithm or curve")
@@ -64,9 +58,9 @@ func FromPrivateKey(privateKey PrivateKey) (*KeyPair, error) {
 	var priv hedera.PrivateKey
 	var err error
 
-	if privateKey.Algorithm == ALGORITHM_ED25519 {
+	if privateKey.Algorithm == ED25519 {
 		priv, err = hedera.PrivateKeyFromStringEd25519(privateKey.Key)
-	} else if privateKey.Algorithm == ALGORITHM_ECDSA && privateKey.Curve == CURVE_SECP256K1 {
+	} else if privateKey.Algorithm == ECDSA && privateKey.Curve == secp256k1 {
 		priv, err = hedera.PrivateKeyFromStringECSDA(privateKey.Key)
 	} else {
 		return nil, fmt.Errorf("invalid algorithm or curve")
@@ -85,9 +79,9 @@ func FromPublicKey(publicKey PublicKey) (*KeyPair, error) {
 	var pub hedera.PublicKey
 	var err error
 
-	if publicKey.Algorithm == ALGORITHM_ED25519 {
+	if publicKey.Algorithm == ED25519 {
 		pub, err = hedera.PublicKeyFromStringEd25519(publicKey.Key)
-	} else if publicKey.Algorithm == ALGORITHM_ECDSA && publicKey.Curve == CURVE_SECP256K1 {
+	} else if publicKey.Algorithm == ECDSA && publicKey.Curve == secp256k1 {
 		pub, err = hedera.PublicKeyFromStringECDSA(publicKey.Key)
 	} else {
 		return nil, fmt.Errorf("invalid algorithm or curve")
