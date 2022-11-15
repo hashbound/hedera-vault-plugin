@@ -12,7 +12,7 @@ func TestClientConfig(t *testing.T) {
 	networkAddress := "127.0.0.1:50211"
 
 	cc := NewClientConfig().WithNetworkAccountID(networkAccountID).WithNetworkAddress(networkAddress)
-	
+
 	assert.Equal(t, networkAccountID, cc.NetworkNodeAccountID, fmt.Sprintf("expected: %s\n,received: %s", networkAccountID, cc.NetworkNodeAccountID))
 	assert.Equal(t, networkAddress, cc.NetworkNodeAddress, fmt.Sprintf("expected: %s\n,received: %s", networkAddress, cc.NetworkNodeAddress))
 }

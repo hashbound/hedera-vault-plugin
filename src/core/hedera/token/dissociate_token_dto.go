@@ -8,8 +8,8 @@ import (
 )
 
 type DissociateTokenDTO struct {
-	accountID  string	`validate:"required"`
-	accountKey string	`validate:"required"`
+	accountID  string `validate:"required"`
+	accountKey string `validate:"required"`
 }
 
 func (dissociateTokenDTO *DissociateTokenDTO) validate() (*DissociateWithTokenParams, error) {
@@ -18,7 +18,7 @@ func (dissociateTokenDTO *DissociateTokenDTO) validate() (*DissociateWithTokenPa
 	if err != nil {
 		return nil, fmt.Errorf("invalid dissociate token parameters")
 	}
-	
+
 	accountID, err := hedera.AccountIDFromString(dissociateTokenDTO.accountID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid accountID")

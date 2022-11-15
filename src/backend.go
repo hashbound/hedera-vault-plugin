@@ -41,9 +41,9 @@ func newBackend() (*backend, error) {
 	b.Backend = &framework.Backend{
 		Help:        strings.TrimSpace(mockHelp),
 		BackendType: logical.TypeLogical,
-		Paths: framework.PathAppend(),
+		Paths:       framework.PathAppend(),
 	}
-	
+
 	return b, nil
 }
 

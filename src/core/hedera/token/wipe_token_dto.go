@@ -8,9 +8,9 @@ import (
 )
 
 type WipeTokenDTO struct {
-	amount    uint64	`validate:"required,gt=0"`
-	accountID string	`validate:"required"`
-	wipeKey   string	`validate:"required"`
+	amount    uint64 `validate:"required,gt=0"`
+	accountID string `validate:"required"`
+	wipeKey   string `validate:"required"`
 }
 
 func (wipeTokenDTO *WipeTokenDTO) validate() (*WipeTokenParams, error) {
@@ -31,8 +31,8 @@ func (wipeTokenDTO *WipeTokenDTO) validate() (*WipeTokenParams, error) {
 	}
 
 	return &WipeTokenParams{
-		amount: wipeTokenDTO.amount,
+		amount:    wipeTokenDTO.amount,
 		accountID: accountID,
-		wipeKey: wipeKey,
+		wipeKey:   wipeKey,
 	}, nil
 }

@@ -3,10 +3,10 @@ package main
 import (
 	"os"
 
+	"github.com/hashbound/hedera-vault-plugin/src"
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/vault/api"
 	"github.com/hashicorp/vault/sdk/plugin"
-	"github.com/hashbound/hedera-vault-plugin/src"
 )
 
 func main() {

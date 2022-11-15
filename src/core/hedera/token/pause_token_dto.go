@@ -8,7 +8,7 @@ import (
 )
 
 type PauseTokenDTO struct {
-	pauseKey string	`validate:"required"`
+	pauseKey string `validate:"required"`
 }
 
 func (pauseTokenDTO *PauseTokenDTO) validate() (*PauseTokenParams, error) {
@@ -17,7 +17,7 @@ func (pauseTokenDTO *PauseTokenDTO) validate() (*PauseTokenParams, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid pause token parameters")
 	}
-	
+
 	pauseKey, err := hedera.PrivateKeyFromString(pauseTokenDTO.pauseKey)
 	if err != nil {
 		return nil, fmt.Errorf("invalid pause key: %s", err)

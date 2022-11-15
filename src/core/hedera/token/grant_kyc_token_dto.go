@@ -8,8 +8,8 @@ import (
 )
 
 type GrantKycDTO struct {
-	accountID string	`validate:"required"`
-	kycKey    string	`validate:"required"`
+	accountID string `validate:"required"`
+	kycKey    string `validate:"required"`
 }
 
 func (grantKycDTO *GrantKycDTO) validate() (*GrantKycParams, error) {
@@ -18,7 +18,7 @@ func (grantKycDTO *GrantKycDTO) validate() (*GrantKycParams, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid grant KYC parameters")
 	}
-	
+
 	accountID, err := hedera.AccountIDFromString(grantKycDTO.accountID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid accountID")

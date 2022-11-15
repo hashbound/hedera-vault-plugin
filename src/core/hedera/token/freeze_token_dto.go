@@ -8,8 +8,8 @@ import (
 )
 
 type FreezeAccountDTO struct {
-	accountID string	`validate:"required"`
-	kycKey    string	`validate:"required"`
+	accountID string `validate:"required"`
+	kycKey    string `validate:"required"`
 }
 
 func (freezeAccountDTO *FreezeAccountDTO) validate() (*FreezeAccountParams, error) {
@@ -18,7 +18,7 @@ func (freezeAccountDTO *FreezeAccountDTO) validate() (*FreezeAccountParams, erro
 	if err != nil {
 		return nil, fmt.Errorf("invalid freeze token parameters")
 	}
-	
+
 	accountID, err := hedera.AccountIDFromString(freezeAccountDTO.accountID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid accountID")
