@@ -8,8 +8,8 @@ import (
 )
 
 type RevokeKycDTO struct {
-	accountID string	`validate:"required"`
-	kycKey    string	`validate:"required"`
+	accountID string `validate:"required"`
+	kycKey    string `validate:"required"`
 }
 
 func (revokeKycDTO *RevokeKycDTO) validate() (*RevokeKycParams, error) {
@@ -18,7 +18,7 @@ func (revokeKycDTO *RevokeKycDTO) validate() (*RevokeKycParams, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid revoke KYC parameters")
 	}
-	
+
 	accountID, err := hedera.AccountIDFromString(revokeKycDTO.accountID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid accountID")

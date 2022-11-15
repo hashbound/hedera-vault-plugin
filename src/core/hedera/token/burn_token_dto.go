@@ -8,8 +8,8 @@ import (
 )
 
 type BurnTokenDTO struct {
-	amount    uint64	`validate:"required,gt=0"`
-	supplyKey string	`validate:"required"`
+	amount    uint64 `validate:"required,gt=0"`
+	supplyKey string `validate:"required"`
 }
 
 func (burnTokenDTO *BurnTokenDTO) validate() (*BurnTokenParams, error) {

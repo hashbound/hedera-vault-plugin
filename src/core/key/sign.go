@@ -6,9 +6,9 @@ import (
 
 func Sign(privateKey string, algo Algorithm, curve Curve, message []byte) ([]byte, error) {
 	key, err := FromPrivateKey(PrivateKey{
-		Key: privateKey,
+		Key:       privateKey,
 		Algorithm: algo,
-		Curve: curve,
+		Curve:     curve,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("invalid key or parameters: %s", err)

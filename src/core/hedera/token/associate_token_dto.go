@@ -8,8 +8,8 @@ import (
 )
 
 type AssociateTokenDTO struct {
-	accountID  string	`validate:"required"`
-	accountKey string	`validate:"required"`
+	accountID  string `validate:"required"`
+	accountKey string `validate:"required"`
 }
 
 func (associateTokenDTO *AssociateTokenDTO) validate() (*AssociateWithTokenParams, error) {
@@ -18,7 +18,7 @@ func (associateTokenDTO *AssociateTokenDTO) validate() (*AssociateWithTokenParam
 	if err != nil {
 		return nil, fmt.Errorf("invalid associate token parameters")
 	}
-	
+
 	accountID, err := hedera.AccountIDFromString(associateTokenDTO.accountID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid accountID")

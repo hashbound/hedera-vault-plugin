@@ -8,10 +8,10 @@ import (
 )
 
 type TransferTokenDTO struct {
-	amount     uint64	`validate:"required,gt=0"`
-	senderID   string	`validate:"required"`
-	receiverID string	`validate:"required"`
-	senderKey  string	`validate:"required"`
+	amount     uint64 `validate:"required,gt=0"`
+	senderID   string `validate:"required"`
+	receiverID string `validate:"required"`
+	senderKey  string `validate:"required"`
 }
 
 func (transferTokenDTO *TransferTokenDTO) validate() (*TransferTokenParams, error) {
@@ -37,9 +37,9 @@ func (transferTokenDTO *TransferTokenDTO) validate() (*TransferTokenParams, erro
 	}
 
 	return &TransferTokenParams{
-		amount: transferTokenDTO.amount,
-		senderID: senderID,
-		senderKey: senderKey,
+		amount:     transferTokenDTO.amount,
+		senderID:   senderID,
+		senderKey:  senderKey,
 		receiverID: receiverID,
 	}, nil
 }

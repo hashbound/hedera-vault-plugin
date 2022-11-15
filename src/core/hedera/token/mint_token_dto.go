@@ -8,8 +8,8 @@ import (
 )
 
 type MintTokenDTO struct {
-	amount    uint64	`validate:"required,gt=0"`
-	supplyKey string	`validate:"required"`
+	amount    uint64 `validate:"required,gt=0"`
+	supplyKey string `validate:"required"`
 }
 
 func (mintTokenDTO *MintTokenDTO) validate() (*MintTokenParams, error) {
@@ -25,7 +25,7 @@ func (mintTokenDTO *MintTokenDTO) validate() (*MintTokenParams, error) {
 	}
 
 	return &MintTokenParams{
-		amount: mintTokenDTO.amount,
+		amount:    mintTokenDTO.amount,
 		supplyKey: &supplyKey,
 	}, nil
 }
