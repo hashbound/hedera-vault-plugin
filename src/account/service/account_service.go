@@ -3,14 +3,14 @@ package service
 import (
 	"context"
 
-	"github.com/hashbound/hedera-vault-plugin/src/key/store"
+	"github.com/hashbound/hedera-vault-plugin/src/account/store"
 	"github.com/hashicorp/vault/sdk/logical"
 
 	key_service "github.com/hashbound/hedera-vault-plugin/src/key/service"
 )
 
 type AccountService struct {
-	storage *store.KeyStore
+	storage *store.AccountStore
 	k_svc   *key_service.KeyService
 }
 
