@@ -6,8 +6,9 @@ import (
 	"strings"
 
 	"github.com/hashicorp/vault/sdk/framework"
-
 	"github.com/hashicorp/vault/sdk/logical"
+
+	kp "github.com/hashbound/hedera-vault-plugin/src/key/path"
 )
 
 // backend wraps the backend framework and adds a map for storing key value pairs
@@ -41,7 +42,9 @@ func newBackend() (*backend, error) {
 	b.Backend = &framework.Backend{
 		Help:        strings.TrimSpace(mockHelp),
 		BackendType: logical.TypeLogical,
-		Paths:       framework.PathAppend(),
+		Paths: framework.PathAppend(
+			kp.NewKeyPaths().Paths(),
+		),
 	}
 
 	return b, nil
