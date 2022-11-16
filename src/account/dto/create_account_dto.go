@@ -11,7 +11,7 @@ type CreateAccountDTO struct {
 	ID       string `json:"id" validate:"required"`
 }
 
-func (createAccountDTO *CreateAccountDTO) validate() error {
+func (createAccountDTO *CreateAccountDTO) Validate() error {
 	err := validator.New().Struct(createAccountDTO)
 	if err != nil {
 		return fmt.Errorf("validate create account parameters failed")

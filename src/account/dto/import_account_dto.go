@@ -12,7 +12,7 @@ type ImportAccountDTO struct {
 	KeyID     string `json:"keyId" validate:"required"`
 }
 
-func (importAccountDTO *ImportAccountDTO) validate() error {
+func (importAccountDTO *ImportAccountDTO) Validate() error {
 	err := validator.New().Struct(importAccountDTO)
 	if err != nil {
 		return fmt.Errorf("validate get account parameters failed")
