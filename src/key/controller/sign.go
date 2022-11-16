@@ -27,7 +27,7 @@ func Sign(ctx context.Context, req *logical.Request, data *framework.FieldData) 
 	kc := New(ctx, req)
 	signature, err := kc.service.Sign(signMessageDTO)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("sign message failed: %s", err)
 	}
 
 	resp := make(map[string]interface{})

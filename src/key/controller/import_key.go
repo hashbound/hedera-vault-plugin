@@ -30,7 +30,7 @@ func Import(ctx context.Context, req *logical.Request, data *framework.FieldData
 	kc := New(ctx, req)
 	key_vault, err := kc.service.ImportKey(importKeyDTO)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("import key failed")
 	}
 
 	return &logical.Response{
