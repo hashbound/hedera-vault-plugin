@@ -9,18 +9,19 @@ import (
 )
 
 func (svc *KeyService) ImportKey(importKey *dto.ImportKeyDTO) (*entity.Key, error) {
-	err := importKey.Validate(); if err != nil {
+	err := importKey.Validate()
+	if err != nil {
 		return nil, fmt.Errorf("validate create key failed: %s", err)
 	}
 
 	privateKey := key.PrivateKey{
-		Key: importKey.PrivateKey,
+		Key:       importKey.PrivateKey,
 		Algorithm: key.AlgorithmFromString(importKey.Algorithm),
 	}
 	if importKey.Algorithm == key.Algorithm(key.ECDSA).String() {
-		privateKey.Curve =  key.CurveFromString(importKey.Curve)
+		privateKey.Curve = key.CurveFromString(importKey.Curve)
 	}
-	
+
 	keypair, err := key.FromPrivateKey(privateKey)
 	if err != nil {
 		return nil, fmt.Errorf("retreive key pair failed: %s", err)

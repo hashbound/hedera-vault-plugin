@@ -21,7 +21,7 @@ const (
 
 func New(ctx context.Context, storage logical.Storage) *KeyStore {
 	return &KeyStore{
-		ctx: ctx,
+		ctx:     ctx,
 		storage: storage,
 	}
 }
@@ -75,7 +75,8 @@ func (ks *KeyStore) List() ([]string, error) {
 }
 
 func (ks *KeyStore) Delete(id string) error {
-	err := ks.storage.Delete(ks.ctx, ks.getKeyPath(id)); if err != nil {
+	err := ks.storage.Delete(ks.ctx, ks.getKeyPath(id))
+	if err != nil {
 		return fmt.Errorf("delete key from storage failed: %s", err)
 	}
 	return nil

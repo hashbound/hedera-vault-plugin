@@ -7,7 +7,7 @@ import (
 )
 
 type SignMessageDTO struct {
-	ID string `json:"id" validate:"required"`
+	ID      string `json:"id" validate:"required"`
 	Message string `json:"message" validate:"required"`
 }
 

@@ -12,7 +12,7 @@ func TestSignED25519(t *testing.T) {
 	digest := "test message"
 
 	sig, err := Sign(PrivateKey{
-		Key: privateKey,
+		Key:       privateKey,
 		Algorithm: Algorithm(algo),
 	}, []byte(digest))
 	if err != nil {
@@ -29,9 +29,9 @@ func TestSignECDSA(t *testing.T) {
 	digest := "test message"
 
 	sig, err := Sign(PrivateKey{
-		Key: privateKey,
+		Key:       privateKey,
 		Algorithm: Algorithm(algo),
-		Curve: Curve(curve),
+		Curve:     Curve(curve),
 	}, []byte(digest))
 	if err != nil {
 		t.Fatalf("unable to sign digest: %s", err)

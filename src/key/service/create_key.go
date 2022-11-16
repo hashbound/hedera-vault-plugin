@@ -9,7 +9,8 @@ import (
 )
 
 func (svc *KeyService) Create(createKeyDTO *dto.CreateKeyDTO) (*entity.Key, error) {
-	err := createKeyDTO.Validate(); if err != nil {
+	err := createKeyDTO.Validate()
+	if err != nil {
 		return nil, fmt.Errorf("validate create key failed: %s", err)
 	}
 

@@ -18,11 +18,11 @@ func (svc *KeyService) Sign(signMessageDTO *dto.SignMessageDTO) ([]byte, error) 
 	}
 
 	privateKey := key.PrivateKey{
-		Key: entity.PrivateKey,
+		Key:       entity.PrivateKey,
 		Algorithm: key.AlgorithmFromString(entity.Algorithm),
 	}
 	if entity.Algorithm == key.Algorithm(key.ECDSA).String() {
-		privateKey.Curve =  key.CurveFromString(entity.Curve)
+		privateKey.Curve = key.CurveFromString(entity.Curve)
 	}
 
 	signature, err := key.Sign(privateKey, []byte(signMessageDTO.Message))

@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/hashicorp/vault/sdk/logical"
 	"github.com/hashbound/hedera-vault-plugin/src/key/store"
+	"github.com/hashicorp/vault/sdk/logical"
 )
 
 type KeyService struct {

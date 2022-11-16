@@ -8,7 +8,8 @@ import (
 )
 
 func (k_svc *KeyService) GetKey(getKeyDTO *dto.GetKeyDTO) (*entity.Key, error) {
-	err := getKeyDTO.Validate(); if err != nil {
+	err := getKeyDTO.Validate()
+	if err != nil {
 		return nil, fmt.Errorf("validate get key failed: %s", err)
 	}
 

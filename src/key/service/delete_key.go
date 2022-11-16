@@ -7,7 +7,8 @@ import (
 )
 
 func (svc *KeyService) Delete(deleteKeyDTO *dto.DeleteKeyDTO) error {
-	err := deleteKeyDTO.Validate(); if err != nil {
+	err := deleteKeyDTO.Validate()
+	if err != nil {
 		return fmt.Errorf("validate delete key parameters failed: %s", err)
 	}
 
@@ -18,6 +19,6 @@ func (svc *KeyService) Delete(deleteKeyDTO *dto.DeleteKeyDTO) error {
 	if entity == nil {
 		return fmt.Errorf("key does not exist")
 	}
-	
+
 	return svc.storage.Delete(deleteKeyDTO.ID)
 }
