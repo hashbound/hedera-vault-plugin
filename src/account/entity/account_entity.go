@@ -6,6 +6,7 @@ type Account struct {
 	ID        string `json:"id"`
 	AccountID string `json:"accountId"`
 	KeyID     string `json:"keyId"`
+	Network   string `json:"network"`
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 }
