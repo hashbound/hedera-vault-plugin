@@ -15,7 +15,7 @@ func (signMessageDTO *SignMessageDTO) Validate() error {
 	validate := validator.New()
 	err := validate.Struct(signMessageDTO)
 	if err != nil {
-		return fmt.Errorf("validate create key parameters failed: %s", err)
+		return fmt.Errorf("validate sign message parameters failed: %s", err)
 	}
 
 	return nil

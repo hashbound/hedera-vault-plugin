@@ -14,7 +14,7 @@ func (deleteKeyDTO *DeleteKeyDTO) Validate() error {
 	validate := validator.New()
 	err := validate.Struct(deleteKeyDTO)
 	if err != nil {
-		return fmt.Errorf("validate create key parameters failed: %s", err)
+		return fmt.Errorf("validate delete key parameters failed: %s", err)
 	}
 
 	return nil

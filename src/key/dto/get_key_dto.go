@@ -14,7 +14,7 @@ func (getKeyDTO *GetKeyDTO) Validate() error {
 	validate := validator.New()
 	err := validate.Struct(getKeyDTO)
 	if err != nil {
-		return fmt.Errorf("validate create key parameters failed: %s", err)
+		return fmt.Errorf("validate retreive key parameters failed: %s", err)
 	}
 
 	return nil
