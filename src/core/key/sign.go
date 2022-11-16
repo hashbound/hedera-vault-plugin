@@ -4,16 +4,12 @@ import (
 	"fmt"
 )
 
-func Sign(privateKey string, algo Algorithm, curve Curve, message []byte) ([]byte, error) {
-	key, err := FromPrivateKey(PrivateKey{
-		Key:       privateKey,
-		Algorithm: algo,
-		Curve:     curve,
-	})
+func Sign(privateKey PrivateKey, message []byte) ([]byte, error) {
+	priv, err := FromPrivateKey(privateKey)
 	if err != nil {
 		return nil, fmt.Errorf("invalid key or parameters: %s", err)
 	}
 
-	signature := key.PrivateKey.Sign([]byte(message))
+	signature := priv.PrivateKey.Sign([]byte(message))
 	return signature, nil
 }

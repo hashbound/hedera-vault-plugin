@@ -11,7 +11,10 @@ func TestSignED25519(t *testing.T) {
 	algo := ED25519
 	digest := "test message"
 
-	sig, err := Sign(privateKey, Algorithm(algo), None, []byte(digest))
+	sig, err := Sign(PrivateKey{
+		Key:       privateKey,
+		Algorithm: Algorithm(algo),
+	}, []byte(digest))
 	if err != nil {
 		t.Fatalf("unable to sign digest: %s", err)
 	}
@@ -25,7 +28,11 @@ func TestSignECDSA(t *testing.T) {
 	curve := secp256k1
 	digest := "test message"
 
-	sig, err := Sign(privateKey, Algorithm(algo), Curve(curve), []byte(digest))
+	sig, err := Sign(PrivateKey{
+		Key:       privateKey,
+		Algorithm: Algorithm(algo),
+		Curve:     Curve(curve),
+	}, []byte(digest))
 	if err != nil {
 		t.Fatalf("unable to sign digest: %s", err)
 	}
