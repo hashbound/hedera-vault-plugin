@@ -11,8 +11,10 @@ const (
 
 func CurveFromString(curve string) Curve {
 	switch curve {
-	case Curve(secp256k1).String():
+	case "secp256k1":
 		return secp256k1
+	case "":
+		return None
 	}
 
 	panic(fmt.Sprintf("unreachable: Curve.CurveFromString() switch statement is non-exhaustive. Status: %v", curve))
@@ -22,6 +24,8 @@ func (curve Curve) String() string {
 	switch curve {
 	case secp256k1:
 		return "secp256k1"
+	case None:
+		return ""
 	}
 
 	panic(fmt.Sprintf("unreachable: Curve.FromString() switch statement is non-exhaustive. Status: %v", uint32(curve)))
