@@ -22,6 +22,7 @@ func (ap *AccountPaths) Paths() []*framework.Path {
 		[]*framework.Path{
 			ap.pathAccounts(),
 			ap.pathImportAccounts(),
+			ap.pathSignTransaction(),
 		},
 	)
 }
@@ -75,6 +76,31 @@ func (kp *AccountPaths) pathImportAccounts() *framework.Path {
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.CreateOperation: &framework.PathOperation{
 				Callback: controller.Import,
+			},
+		},
+
+		ExistenceCheck: kp.handleExistenceCheck,
+	}
+}
+
+func (kp *AccountPaths) pathSignTransaction() *framework.Path {
+	return &framework.Path{
+		Pattern: "accounts/sign_transaction",
+
+		Fields: map[string]*framework.FieldSchema{
+			"accountId": {
+				Type:     framework.TypeString,
+				Required: true,
+			},
+			"transaction": {
+				Type:     framework.TypeString,
+				Required: true,
+			},
+		},
+
+		Operations: map[logical.Operation]framework.OperationHandler{
+			logical.CreateOperation: &framework.PathOperation{
+				Callback: controller.SignTransaction,
 			},
 		},
 
