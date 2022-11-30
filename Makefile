@@ -38,8 +38,9 @@ test:
 	vault write hedera/keys/2/sign message="123"
 	vault delete hedera/keys id="1"
 
-	vault write hedera/accounts/import id="1" keyId="2" accountId="0.0.2"
+	vault write hedera/accounts/import id="1" keyId="3" accountId="0.0.2"
 	vault read hedera/accounts id="1"
 	vault list hedera/accounts
+	vault write hedera/accounts/sign_transaction id="1" transaction="0a742a720a6e0a120a0c0888e09d9c0610ddccbb8c0212021802120218031880bcc1960b22020878ea01490a0b4a696d6d7920546f6b656e12024a54180220e8072a021802322212200aa8e21064c61eab86e2a9c164565b4e7a9a4146106e0a6cd03a8c395a110e92720218027a0508d0c8e1031200"
 
 .PHONY: build clean fmt start enable
