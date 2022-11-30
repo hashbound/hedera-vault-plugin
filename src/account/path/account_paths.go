@@ -88,7 +88,7 @@ func (kp *AccountPaths) pathSignTransaction() *framework.Path {
 		Pattern: "accounts/sign_transaction",
 
 		Fields: map[string]*framework.FieldSchema{
-			"accountId": {
+			"id": {
 				Type:     framework.TypeString,
 				Required: true,
 			},
