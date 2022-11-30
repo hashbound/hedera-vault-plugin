@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/hashgraph/hedera-sdk-go/v2"
 )
 
 type ImportAccountDTO struct {
@@ -15,7 +16,13 @@ type ImportAccountDTO struct {
 func (importAccountDTO *ImportAccountDTO) Validate() error {
 	err := validator.New().Struct(importAccountDTO)
 	if err != nil {
-		return fmt.Errorf("validate get account parameters failed")
+		return fmt.Errorf("validate import account parameters failed")
+	}
+
+	// validate AccountID
+	_, err = hedera.AccountIDFromString(importAccountDTO.AccountID)
+	if err != nil {
+		return fmt.Errorf("invalid account id: %s", err)
 	}
 
 	return nil
