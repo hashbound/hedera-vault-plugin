@@ -13,7 +13,6 @@ type AccountStore struct {
 	ctx         context.Context
 	storage     logical.Storage
 	clientToken string
-	network     string
 }
 
 const (
@@ -29,11 +28,6 @@ func New(ctx context.Context, storage logical.Storage) *AccountStore {
 
 func (as *AccountStore) WithClientToken(clientToken string) *AccountStore {
 	as.clientToken = clientToken
-	return as
-}
-
-func (as *AccountStore) WithNetwork(network string) *AccountStore {
-	as.network = network
 	return as
 }
 
@@ -89,5 +83,5 @@ func (as *AccountStore) Delete(id string) error {
 }
 
 func (as *AccountStore) getPath(id string) string {
-	return fmt.Sprintf("%s/%s/%s/%s", as.clientToken, as.network, PathIdentifier, id)
+	return fmt.Sprintf("%s/%s/%s", as.clientToken, PathIdentifier, id)
 }
