@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashbound/hedera-vault-plugin/src/core/formatters"
 	"github.com/hashbound/hedera-vault-plugin/src/account/dto"
+	"github.com/hashbound/hedera-vault-plugin/src/core/formatters"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -21,15 +21,15 @@ func Import(ctx context.Context, req *logical.Request, data *framework.FieldData
 	}
 
 	importAccountDTO := &dto.ImportAccountDTO{
-		ID:         data.Get("id").(string),
-		AccountID: data.Get("accountID").(string),
-		KeyID: data.Get("keyID").(string),
+		ID:        data.Get("id").(string),
+		AccountID: data.Get("accountId").(string),
+		KeyID:     data.Get("keyId").(string),
 	}
 
 	ac := New(ctx, req)
 	account, err := ac.service.ImportAccount(importAccountDTO)
 	if err != nil {
-		return nil, fmt.Errorf("import account failed")
+		return nil, fmt.Errorf("import account failed: %s", err)
 	}
 
 	return &logical.Response{

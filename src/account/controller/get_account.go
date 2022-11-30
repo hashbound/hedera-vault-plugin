@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/hashbound/hedera-vault-plugin/src/core/formatters"
 	"github.com/hashbound/hedera-vault-plugin/src/account/dto"
+	"github.com/hashbound/hedera-vault-plugin/src/core/formatters"
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 )
@@ -21,7 +21,7 @@ func Get(ctx context.Context, req *logical.Request, data *framework.FieldData) (
 	}
 
 	getAccountDTO := &dto.GetAccountDTO{
-		ID:         data.Get("id").(string),
+		ID: data.Get("id").(string),
 	}
 
 	ac := New(ctx, req)
