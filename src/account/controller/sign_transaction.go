@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
 
 	"github.com/hashbound/hedera-vault-plugin/src/account/dto"
@@ -19,9 +20,14 @@ func SignTransaction(ctx context.Context, req *logical.Request, data *framework.
 		return nil, fmt.Errorf("data must be provided to store in secret")
 	}
 
+	transaction, err := hex.DecodeString(data.Get("transaction").(string))
+	if err != nil {
+		return nil, fmt.Errorf("decode transaction failed: %s", err)
+	}
+
 	signTransaactionDTO := &dto.SignTransactionDTO{
-		AccountID:   data.Get("accountId").(string),
-		Transaction: data.Get("transaction").(string),
+		ID:          data.Get("id").(string),
+		Transaction: transaction,
 	}
 
 	ac := New(ctx, req)
@@ -31,7 +37,7 @@ func SignTransaction(ctx context.Context, req *logical.Request, data *framework.
 	}
 
 	response := make(map[string]interface{})
-	response["signed"] = string(signedTransaction)
+	response["signed"] = hex.EncodeToString(signedTransaction)
 
 	return &logical.Response{
 		Data: response,
