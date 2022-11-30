@@ -38,4 +38,8 @@ test:
 	vault write hedera/keys/2/sign message="123"
 	vault delete hedera/keys id="1"
 
+	vault write hedera/accounts/import id="1" keyId="2" accountId="0.0.2"
+	vault read hedera/accounts id="1"
+	vault list hedera/accounts
+
 .PHONY: build clean fmt start enable
