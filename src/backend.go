@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/vault/sdk/framework"
 	"github.com/hashicorp/vault/sdk/logical"
 
+	ap "github.com/hashbound/hedera-vault-plugin/src/account/path"
 	kp "github.com/hashbound/hedera-vault-plugin/src/key/path"
 )
 
@@ -44,6 +45,7 @@ func newBackend() (*backend, error) {
 		BackendType: logical.TypeLogical,
 		Paths: framework.PathAppend(
 			kp.NewKeyPaths().Paths(),
+			ap.NewKeyPaths().Paths(),
 		),
 	}
 
