@@ -15,12 +15,12 @@ func (svc *AccountService) SignTransaction(signTransactionDTO *dto.SignTransacti
 		return nil, fmt.Errorf("validate sign transaction parameters failed: %s", err)
 	}
 
-	account, err := svc.storage.Read(signTransactionDTO.AccountID)
+	account, err := svc.storage.Read(signTransactionDTO.ID)
 	if err != nil {
 		return nil, fmt.Errorf("retreive account from storage failed: %s", err)
 	}
 
-	keypair, err := svc.k_svc.GetKey(&key_dto.GetKeyDTO{ID: account.AccountID})
+	keypair, err := svc.k_svc.GetKey(&key_dto.GetKeyDTO{ID: account.KeyID})
 	if err != nil {
 		return nil, fmt.Errorf("retreive key from storage failed: %s", err)
 	}
