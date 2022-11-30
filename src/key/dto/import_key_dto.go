@@ -17,7 +17,7 @@ func (importKeyDTO *ImportKeyDTO) Validate() error {
 	validate := validator.New()
 	err := validate.Struct(importKeyDTO)
 	if err != nil {
-		return fmt.Errorf("validate create key parameters failed: %s", err)
+		return fmt.Errorf("validate import key parameters failed: %s", err)
 	}
 
 	return nil

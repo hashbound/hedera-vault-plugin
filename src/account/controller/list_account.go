@@ -13,11 +13,11 @@ func List(ctx context.Context, req *logical.Request, data *framework.FieldData) 
 		return nil, fmt.Errorf("client token empty")
 	}
 
-	kc := New(ctx, req)
-	keys, err := kc.service.List()
+	ac := New(ctx, req)
+	accounts, err := ac.service.List()
 	if err != nil {
-		return nil, fmt.Errorf("list keys failed: %s", err)
+		return nil, fmt.Errorf("list accounts failed: %s", err)
 	}
 
-	return logical.ListResponse(keys), nil
+	return logical.ListResponse(accounts), nil
 }

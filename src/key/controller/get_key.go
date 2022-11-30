@@ -23,7 +23,7 @@ func GetKey(ctx context.Context, req *logical.Request, data *framework.FieldData
 	kc := New(ctx, req)
 	key, err := kc.service.GetKey(getKeyDTO)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("retreive key failed")
 	}
 
 	return &logical.Response{

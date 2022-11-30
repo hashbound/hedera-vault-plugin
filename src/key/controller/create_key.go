@@ -25,7 +25,7 @@ func Create(ctx context.Context, req *logical.Request, data *framework.FieldData
 	kc := New(ctx, req)
 	key, err := kc.service.Create(createKeyDTO)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("write key failed: %s", err)
 	}
 
 	return &logical.Response{
